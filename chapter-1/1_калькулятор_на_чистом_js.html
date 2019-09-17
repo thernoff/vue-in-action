@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Калькулятор на JavaScript</title>
+  <style>
+    p,
+    input {
+      font-family: monospace;
+    }
+
+    /*
+      Свойство white-space устанавливает, как отображать пробелы между словами.
+      Текст показывается с учетом всех пробелов и переносов, как они были добавлены разработчиком в коде HTML.
+      Если строка получается слишком длинной и не помещается в окне браузера, то будет добавлена горизонтальная полоса прокрутки.
+    */
+    p {
+      white-space: pre;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="myCalc">
+    <p>x <input type="text" class="calc-x-input" value="0" /></p>
+    <p>y <input type="text" class="calc-y-input" value="0" /></p>
+    <p>--------------------</p>
+    <p>= <span class="calc-result"></span></p>
+  </div>
+
+  <script>
+    (
+      function () {
+
+        // xInput, yInput, output - селекторы элементов формы
+        function Calc(xInput, yInput, output) {
+          this.xInput = xInput;
+          this.yInput = yInput;
+          this.output = output;
+        }
+
+        Calc.xName = 'xInput';
+        Calc.yName = 'yInput';
+
+        Calc.prototype = {
+          render: function (result) {
+            this.output.innerText = String(result);
+          }
+        };
+
+        // Конструктор значений для экземпляра Calc
+        function CalcValue(calc, x, y) {
+          this.calc = calc;
+          this.x = x;
+          this.y = y;
+          this.result = +x + +y;
+        }
+
+        CalcValue.prototype = {
+          copyWith: function (name, value) {
+            var number = parseFloat(value);
+
+            if (isNaN(number) || !isFinite(number)) {
+              return this;
+            }
+
+            if (name === Calc.xName) {
+              return new CalcValue(this.calc, number, this.y);
+            }
+
+            if (name === Calc.yName) {
+              return new CalcValue(this.calc, this.x, value);
+            }
+
+            return this;
+          },
+          render: function () {
+            this.calc.render(this.result);
+          }
+        };
+
+        function initCalc(elem) {
+          // Создаем объект calc, который по сути является моделью-представлением формы
+          var calc = new Calc(
+            elem.querySelector('input.calc-x-input'),
+            elem.querySelector('input.calc-y-input'),
+            elem.querySelector('span.calc-result')
+          );
+
+          var lastValues = new CalcValue(
+            calc,
+            parseFloat(calc.xInput.value),
+            parseFloat(calc.yInput.value)
+          );
+
+          // Данная функция будет срабатывать при возникновении события keyup на выбранном элементе
+          var handleCalcEvent = function handleCalcEvent(e) {
+            var newValues = lastValues, elem = e.target;
+
+            switch (elem) {
+              case calc.xInput:
+                newValues = lastValues.copyWith(Calc.xName, elem.value);
+                break;
+              case calc.yInput:
+                newValues = lastValues.copyWith(Calc.yName, elem.value)
+                break;
+            }
+
+            if (newValues !== lastValues) {
+              lastValues = newValues;
+              lastValues.render();
+            }
+          };
+
+          elem.addEventListener('keyup', handleCalcEvent, false);
+
+          return lastValues;
+        }
+
+        window.addEventListener('load', function () {
+          var cv = initCalc(document.getElementById('myCalc'));
+          cv.render();
+        }, false);
+      }
+    )();
+  </script>
+</body>
+
+</html>
