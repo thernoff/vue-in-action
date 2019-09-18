@@ -1,20 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Vue.js Pet Depot</title>
-    <link rel="stylesheet" href="./assets/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="./assets/css/app.css" />
-  </head>
 
-  <body>
-    <div id="app">
-      <header>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Vue.js Pet Depot</title>
+  <link rel="stylesheet" href="./assets/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="./assets/css/app.css" />
+
+</head>
+
+<body>
+
+  <div id="app" class="container-fluid p-0">
+
+    <header>
+      <nav class="navbar navbar-dark bg-dark text-white">
         <h1>{{ sitename }}</h1>
-      </header>
-      <main>
+        <div class="ml-auto">
+          <span><i class="fas fa-shopping-cart mr-1"></i>{{ cartItemCount }}</span>
+        </div>
+      </nav>
+    </header>
+    <main>
+      <div class="container">
         <div class="row product">
           <div class="col">
             <figure>
@@ -31,102 +41,105 @@
             </button>
           </div>
         </div>
-      </main>
-    </div>
-    <script src="https://kit.fontawesome.com/2789eb5531.js"></script>
-    <script src="./js/vue.min.js"></script>
-    <script>
-      // Переменная для включения и выключения функций обратного вызова
-      var APP_LOG_LIFECYCLE_EVENTS = true;
-      var webstore = new Vue({
-        el: "#app",
-        data: {
-          sitename: "Vue.js Pet Depot",
-          product: {
-            id: 1001,
-            title: "Cat Food, 25lb bag",
-            description:
-              "A 25 pound bag of <em>irresistible</em>, organic goodness for your cat.",
-            price: 2000, // цена указывается в центах
-            image: "assets/images/product-fullsize.png"
-          },
-          cart: []
+      </div>
+    </main>
+  </div>
+
+  <script src="https://kit.fontawesome.com/2789eb5531.js"></script>
+  <script src="./js/vue.min.js"></script>
+  <script>
+    // Переменная для включения и выключения функций обратного вызова
+    var APP_LOG_LIFECYCLE_EVENTS = true;
+    var webstore = new Vue({
+      el: "#app",
+      data: {
+        sitename: "Vue.js Pet Depot",
+        product: {
+          id: 1001,
+          title: "Cat Food, 25lb bag",
+          description:
+            "A 25 pound bag of <em>irresistible</em>, organic goodness for your cat.",
+          price: 2000, // цена указывается в центах
+          image: "assets/images/product-fullsize.png"
         },
-        filters: {
-          // фильтр formatPrice() форматирует цену переданную в центах в строку вида: 12500 -> $12.50 или 2000000 -> $20,000.00
-          formatPrice: function(price) {
-            if (!parseInt(price)) {
-              return "";
+        cart: []
+      },
+      filters: {
+        // фильтр formatPrice() форматирует цену переданную в центах в строку вида: 12500 -> $12.50 или 2000000 -> $20,000.00
+        formatPrice: function (price) {
+          if (!parseInt(price)) {
+            return "";
+          }
+
+          // если значение цены больше 1000 долларов или 100000 центов, то в этом случае представим цену в виде строки: 2000000 -> $20,000.00
+          if (price > 99999) {
+            // Метод toFixed(n) округляет число до n знаков после запятой и возвращает строковое представление результата.
+            var priceString = (price / 100).toFixed(2); // 2000000 -> 20000.00
+            var priceArray = priceString.split("").reverse(); // 20000.00 -> ["0", "0", ".", "0", "0", "0", "0", "2"]
+            var index = 3;
+            while (priceArray.length > index + 3) {
+              priceArray.splice(index + 3, 0, ","); // вставляем в массив priceArray новый элемент со значением ","
+              index += 4;
             }
 
-            // если значение цены больше 1000 долларов или 100000 центов, то в этом случае представим цену в виде строки: 2000000 -> $20,000.00
-            if (price > 99999) {
-              // Метод toFixed(n) округляет число до n знаков после запятой и возвращает строковое представление результата.
-              var priceString = (price / 100).toFixed(2); // 2000000 -> 20000.00
-              var priceArray = priceString.split("").reverse(); // 20000.00 -> ["0", "0", ".", "0", "0", "0", "0", "2"]
-              var index = 3;
-              while (priceArray.length > index + 3) {
-                priceArray.splice(index + 3, 0, ","); // вставляем в массив priceArray новый элемент со значением ","
-                index += 4;
-              }
-
-              return "$" + priceArray.reverse().join("");
-            } else {
-              return "$" + (price / 100).toFixed(2);
-            }
-          }
-        },
-        methods: {
-          addToCart: function() {
-            this.cart.push(this.product.id);
-          }
-        },
-        computed: {
-          cartItemCount: function() {
-            return this.cart.length || "";
-          }
-        },
-        beforeCreate: function() {
-          if (APP_LOG_LIFECYCLE_EVENTS) {
-            console.log("beforeCreate");
-          }
-        },
-        created: function() {
-          if (APP_LOG_LIFECYCLE_EVENTS) {
-            console.log("created");
-          }
-        },
-        beforeMount: function() {
-          if (APP_LOG_LIFECYCLE_EVENTS) {
-            console.log("beforeMount");
-          }
-        },
-        mounted: function() {
-          if (APP_LOG_LIFECYCLE_EVENTS) {
-            console.log("mounted");
-          }
-        },
-        beforeUpdate: function() {
-          if (APP_LOG_LIFECYCLE_EVENTS) {
-            console.log("beforeUpdate");
-          }
-        },
-        updated: function() {
-          if (APP_LOG_LIFECYCLE_EVENTS) {
-            console.log("updated");
-          }
-        },
-        beforeDestroy: function() {
-          if (APP_LOG_LIFECYCLE_EVENTS) {
-            console.log("beforeDestroy");
-          }
-        },
-        destroyed: function() {
-          if (APP_LOG_LIFECYCLE_EVENTS) {
-            console.log("destroyed");
+            return "$" + priceArray.reverse().join("");
+          } else {
+            return "$" + (price / 100).toFixed(2);
           }
         }
-      });
-    </script>
-  </body>
+      },
+      methods: {
+        addToCart: function () {
+          this.cart.push(this.product.id);
+        }
+      },
+      computed: {
+        cartItemCount: function () {
+          return this.cart.length || "";
+        }
+      },
+      beforeCreate: function () {
+        if (APP_LOG_LIFECYCLE_EVENTS) {
+          console.log("beforeCreate");
+        }
+      },
+      created: function () {
+        if (APP_LOG_LIFECYCLE_EVENTS) {
+          console.log("created");
+        }
+      },
+      beforeMount: function () {
+        if (APP_LOG_LIFECYCLE_EVENTS) {
+          console.log("beforeMount");
+        }
+      },
+      mounted: function () {
+        if (APP_LOG_LIFECYCLE_EVENTS) {
+          console.log("mounted");
+        }
+      },
+      beforeUpdate: function () {
+        if (APP_LOG_LIFECYCLE_EVENTS) {
+          console.log("beforeUpdate");
+        }
+      },
+      updated: function () {
+        if (APP_LOG_LIFECYCLE_EVENTS) {
+          console.log("updated");
+        }
+      },
+      beforeDestroy: function () {
+        if (APP_LOG_LIFECYCLE_EVENTS) {
+          console.log("beforeDestroy");
+        }
+      },
+      destroyed: function () {
+        if (APP_LOG_LIFECYCLE_EVENTS) {
+          console.log("destroyed");
+        }
+      }
+    });
+  </script>
+</body>
+
 </html>
