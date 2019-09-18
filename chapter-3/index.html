@@ -36,7 +36,7 @@
             <p v-html="product.description"></p>
             <!--Использование фильтра formatPrice()-->
             <p class="price">{{ product.price | formatPrice }}</p>
-            <button class="default" v-on:click="addToCart">
+            <button class="default" v-on:click="addToCart" v-show="canAddToCart">
               Add to cart
             </button>
           </div>
@@ -60,7 +60,8 @@
           description:
             "A 25 pound bag of <em>irresistible</em>, organic goodness for your cat.",
           price: 2000, // цена указывается в центах
-          image: "assets/images/product-fullsize.png"
+          image: "assets/images/product-fullsize.png",
+          availableInventory: 5
         },
         cart: []
       },
@@ -96,6 +97,9 @@
       computed: {
         cartItemCount: function () {
           return this.cart.length || "";
+        },
+        canAddToCart: function () {
+          return this.product.availableInventory > this.cartItemCount;
         }
       },
       beforeCreate: function () {
