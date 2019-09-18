@@ -19,7 +19,9 @@
       <nav class="navbar navbar-dark bg-dark text-white">
         <h1>{{ sitename }}</h1>
         <div class="ml-auto">
-          <span><i class="fas fa-shopping-cart mr-1"></i>{{ cartItemCount }}</span>
+          <button type="button" class="btn btn-default text-white btn-lg" v-on:click="showCheckout">
+            <span><i class="fas fa-shopping-cart mr-1"></i>{{ cartItemCount }}</span>Checkout
+          </button>
         </div>
       </nav>
     </header>
@@ -64,7 +66,8 @@
           image: "assets/images/product-fullsize.png",
           availableInventory: 5
         },
-        cart: []
+        cart: [],
+        showProduct: true
       },
       filters: {
         // фильтр formatPrice() форматирует цену переданную в центах в строку вида: 12500 -> $12.50 или 2000000 -> $20,000.00
@@ -93,6 +96,10 @@
       methods: {
         addToCart: function () {
           this.cart.push(this.product.id);
+        },
+        // используем сокращенный синтаксис объявления методов
+        showCheckout() {
+          this.showProduct = this.showProduct ? false : true;
         }
       },
       computed: {
