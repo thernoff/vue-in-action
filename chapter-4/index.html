@@ -88,7 +88,8 @@
 
               <div class="form-row">
                 <div class="col-md-6 boxes">
-                  <input type="checkbox" id="gift" value="true" v-model="order.gift">
+                  <input type="checkbox" id="gift" value="true" v-bind:true-value="order.sendGift"
+                    v-bind:false-value="order.dontSendGift" v-model="order.gift">
                   <label for="gift">Ship As Gift?</label>
                 </div>
 
@@ -125,7 +126,7 @@
   </main>
   </div>
 
-  <script src="https://kit.fontawesome.com/2789eb5531.js"></script>
+  <!-- <script src="https://kit.fontawesome.com/2789eb5531.js"></script> -->
   <script src="./js/vue.min.js"></script>
   <script>
     // Переменная для включения и выключения функций обратного вызова
@@ -152,7 +153,9 @@
           city: '',
           zip: '',
           state: '',
-          gift: false,
+          gift: 'Send As A Gift',
+          sendGift: 'Send As A Gift',
+          dontSendGift: 'Do Not Send As A Gift',
           method: 'Home'
         }
       },
