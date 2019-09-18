@@ -94,9 +94,9 @@
                 </div>
 
                 <div class="col-md-6 boxes">
-                  <input type="radio" id="home" value="Home" v-model="order.method">
+                  <input type="radio" id="home" v-bind:value="order.home" v-model="order.method">
                   <label for="home">Home</label>
-                  <input type="radio" id="business" value="Business" v-model="order.method">
+                  <input type="radio" id="business" v-bind:value="order.business" v-model="order.method">
                   <label for="business">Business</label>
                 </div>
               </div>
@@ -156,7 +156,9 @@
           gift: 'Send As A Gift',
           sendGift: 'Send As A Gift',
           dontSendGift: 'Do Not Send As A Gift',
-          method: 'Home'
+          method: 'Home Address',
+          business: 'Business Address',
+          home: 'Home Address'
         }
       },
       filters: {
