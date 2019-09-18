@@ -27,8 +27,8 @@
     </header>
     <main>
       <div class="container">
-        <div class="row product">
-          <div v-if="showProduct">
+        <div class="w-100 product">
+          <div class="row" v-if="showProduct">
             <div class="col">
               <figure>
                 <img v-bind:src="product.image" v-bind:alt="product.title" />
@@ -45,12 +45,84 @@
               <button class="btn btn-primary default" disabled v-else>Add to cart</button>
             </div>
           </div>
-          <div v-else>
+          <div class="w-100" v-else>
+            <form>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <strong>First Name:</strong>
+                  <input v-model="order.firstName" class="form-control" />
+                </div>
+                <div class="form-group col-md-6">
+                  <strong>Last Name:</strong>
+                  <input v-model="order.lastName" class="form-control" />
+                </div>
+              </div>
 
+              <div class="form-group">
+                <strong>Address:</strong>
+                <input v-model="order.address" class="form-contol" />
+              </div>
+
+              <div class="form-group">
+                <strong>City:</strong>
+                <input v-model="order.city" class="form-contol" />
+              </div>
+
+              <div class="form-row">
+                <div class="col-md-2">
+                  <strong>State:</strong>
+                  <select v-model="order.state" class="form-contol">
+                    <option disabled value="">State</option>
+                    <option>AL</option>
+                    <option>AR</option>
+                    <option>CA</option>
+                    <option>NV</option>
+                  </select>
+                </div>
+
+                <div class="col-md-6 offset-md-4">
+                  <strong>Zip/Postal Code:</strong>
+                  <input v-model="order.zip" class="form-contol" />
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="col-md-6 boxes">
+                  <input type="checkbox" id="gift" value="true" v-model="order.gift">
+                  <label for="gift">Ship As Gift?</label>
+                </div>
+
+                <div class="col-md-6 boxes">
+                  <input type="radio" id="home" value="Home" v-model="order.method">
+                  <label for="home">Home</label>
+                  <input type="radio" id="business" value="Business" v-model="order.method">
+                  <label for="business">Business</label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="col-md-6 offset-md-3 text-center">
+                  <button type="submit" class="btn btn-primary" v-on:click="submitForm">Place Order</button>
+                </div>
+              </div>
+            </form>
+            <div class="col-md-12 verify">
+              <pre>
+                  First Name: {{ order.firstName }}
+                  Last Name: {{ order.lastName }}
+                  Address: {{ order.address }}
+                  City: {{ order.city }}
+                  Zip: {{ order.zip }}
+                  State: {{ order.state }}
+                  Method: {{ order.method }}
+                  Gift: {{ order.gift }}
+                </pre>
+            </div>
           </div>
         </div>
       </div>
-    </main>
+  </div>
+  </main>
   </div>
 
   <script src="https://kit.fontawesome.com/2789eb5531.js"></script>
@@ -72,7 +144,17 @@
           availableInventory: 5
         },
         cart: [],
-        showProduct: true
+        showProduct: true,
+        order: {
+          firstName: '',
+          lastName: '',
+          address: '',
+          city: '',
+          zip: '',
+          state: '',
+          gift: false,
+          method: 'Home'
+        }
       },
       filters: {
         // фильтр formatPrice() форматирует цену переданную в центах в строку вида: 12500 -> $12.50 или 2000000 -> $20,000.00
@@ -105,6 +187,9 @@
         // используем сокращенный синтаксис объявления методов
         showCheckout() {
           this.showProduct = this.showProduct ? false : true;
+        },
+        submitForm() {
+          alert("Submitted");
         }
       },
       computed: {
