@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link rel="stylesheet" href="./assets/css/bootstrap.min.css" />
+</head>
+
+<body>
+  <div id="app" class="container p-0">
+    <my-component :num="myNumber" :str="passedString" :even="myNumber" :obj="passedObject"></my-component>
+  </div>
+  <script src="./js/vue.js"></script>
+  <script>
+    const MyComponent = {
+      props: {
+        num: {
+          type: Number,
+          required: true
+        },
+        str: {
+          type: String,
+          default: "Hello world!"
+        },
+        obj: {
+          type: Object,
+          default: () => {
+            return {
+              message: 'Hello from object'
+            }
+          }
+        },
+        even: {
+          validator: (value) => {
+            return (value % 2 === 0)
+          }
+        }
+      },
+      // в {{even}} будет выведено 43, а не false как ожидалось, тем не менее валидатор отработал
+      template: '<div>Number: {{num}}<br/>String: {{str}} \
+        <br/>IsEven?:{{even}}<br/>Object:{{obj.message}}</div>',
+    };
+
+    var app = new Vue({
+      el: "#app",
+      components: {
+        'my-component': MyComponent
+      },
+      data() {
+        return {
+          passedString: 'Hello From Parent',
+          myNumber: 43,
+          passedObject: { message: 'Passed Object' }
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>
