@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link rel="stylesheet" href="./assets/css/bootstrap.min.css" />
+</head>
+
+<body>
+  <div id="app" class="container p-0">
+    <!--
+      Использование вложенных шаблонов
+      Директива inline-template заставляет Vue отобразить содержимое компонента между открывающим и закрывающим тегами my-component
+    -->
+    <my-component :my-info="message" inline-template>
+      <div>
+        <p>
+          inline-template - {{myInfo}}
+        </p>
+      </div>
+    </my-component>
+  </div>
+  <script src="./js/vue.min.js"></script>
+  <script>
+    const MyComponent = {
+      props: ['myInfo']
+    };
+
+    var app = new Vue({
+      el: "#app",
+      components: { 'my-component': MyComponent },
+      data() {
+        return {
+          message: "Hello World!"
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>
