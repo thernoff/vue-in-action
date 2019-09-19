@@ -27,11 +27,11 @@
     </header>
     <main>
       <div class="container">
-        <div class="w-100 product">
-          <div class="row" v-if="showProduct">
+        <div class="w-100" v-if="showProduct">
+          <div class="row product" v-for="product in products">
             <div class="col">
               <figure>
-                <img v-bind:src="product.image" v-bind:alt="product.title" />
+                <img class="img-fluid" v-bind:src="product.image" v-bind:alt="product.title" />
               </figure>
             </div>
             <div class="col col-expand">
@@ -39,89 +39,90 @@
               <p v-html="product.description"></p>
               <!--Использование фильтра formatPrice()-->
               <p class="price">{{ product.price | formatPrice }}</p>
-              <button class="btn btn-primary default" v-on:click="addToCart" v-if="canAddToCart">
+              <button class="btn btn-primary default" v-on:click="addToCart(product)" v-if="canAddToCart(product)">
                 Add to cart
               </button>
               <button class="btn btn-primary default" disabled v-else>Add to cart</button>
-              <span class="inventory-message" v-if="product.availableInventory - cartItemCount === 0">
+              <span class="inventory-message" v-if="product.availableInventory - cartCount(product.id) === 0">
                 All out!
               </span>
-              <span class="inventory-message" v-else-if="product.availableInventory - cartItemCount < 5">
-                Only {{product.availableInventory - cartItemCount}} left!
+              <span class="inventory-message" v-else-if="product.availableInventory - cartCount(product.id) < 5">
+                Only {{product.availableInventory - cartCount(product.id)}} left!
               </span>
               <span class="inventory-message" v-else>
                 Buy Now!
               </span>
               <div class="rating">
-                <span v-bind:class="{'rating-active': checkRating(n)}" v-for="n in 5">☆</span>
+                <span v-bind:class="{'rating-active': checkRating(n, product)}" v-for="n in 5">☆</span>
               </div>
             </div>
           </div>
-          <div class="w-100" v-else>
-            <form>
-              <div class="form-row">
-                <div class="form-group col-md-6">
-                  <strong>First Name:</strong>
-                  <input v-model.trim="order.firstName" class="form-control" />
-                </div>
-                <div class="form-group col-md-6">
-                  <strong>Last Name:</strong>
-                  <input v-model.trim="order.lastName" class="form-control" />
-                </div>
+        </div>
+        <div class="w-100" v-else>
+          <form>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <strong>First Name:</strong>
+                <input v-model.trim="order.firstName" class="form-control" />
+              </div>
+              <div class="form-group col-md-6">
+                <strong>Last Name:</strong>
+                <input v-model.trim="order.lastName" class="form-control" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <strong>Address:</strong>
+              <input v-model.trim="order.address" class="form-contol" />
+            </div>
+
+            <div class="form-group">
+              <strong>City:</strong>
+              <input v-model.trim="order.city" class="form-contol" />
+            </div>
+
+            <div class="form-row">
+              <div class="col-md-2">
+                <strong>State:</strong>
+                <select v-model="order.state" class="form-contol">
+                  <option disabled value="">State</option>
+                  <option v-for="(state, key) in states" v-bind:value="state">{{key}}</option>
+                </select>
               </div>
 
-              <div class="form-group">
-                <strong>Address:</strong>
-                <input v-model.trim="order.address" class="form-contol" />
-              </div>
-
-              <div class="form-group">
-                <strong>City:</strong>
-                <input v-model.trim="order.city" class="form-contol" />
-              </div>
-
-              <div class="form-row">
-                <div class="col-md-2">
-                  <strong>State:</strong>
-                  <select v-model="order.state" class="form-contol">
-                    <option disabled value="">State</option>
-                    <option v-for="(state, key) in states" v-bind:value="state">{{key}}</option>
-                  </select>
-                </div>
-
-                <div class="col-md-6 offset-md-4">
-                  <strong>Zip/Postal Code:</strong>
-                  <!--
+              <div class="col-md-6 offset-md-4">
+                <strong>Zip/Postal Code:</strong>
+                <!--
                     input:number возвращает строку, чтобы значение автоматически приводилось к число, добавим
                     модификатор number директиве v-model
                   -->
-                  <input v-model.number="order.zip" type="number" class="form-contol" />
-                </div>
+                <input v-model.number="order.zip" type="number" class="form-contol" />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="col-md-6 boxes">
+                <input type="checkbox" id="gift" value="true" v-bind:true-value="order.sendGift"
+                  v-bind:false-value="order.dontSendGift" v-model="order.gift">
+                <label for="gift">Ship As Gift?</label>
               </div>
 
-              <div class="form-row">
-                <div class="col-md-6 boxes">
-                  <input type="checkbox" id="gift" value="true" v-bind:true-value="order.sendGift"
-                    v-bind:false-value="order.dontSendGift" v-model="order.gift">
-                  <label for="gift">Ship As Gift?</label>
-                </div>
-
-                <div class="col-md-6 boxes">
-                  <input type="radio" id="home" v-bind:value="order.home" v-model="order.method">
-                  <label for="home">Home</label>
-                  <input type="radio" id="business" v-bind:value="order.business" v-model="order.method">
-                  <label for="business">Business</label>
-                </div>
+              <div class="col-md-6 boxes">
+                <input type="radio" id="home" v-bind:value="order.home" v-model="order.method">
+                <label for="home">Home</label>
+                <input type="radio" id="business" v-bind:value="order.business" v-model="order.method">
+                <label for="business">Business</label>
               </div>
+            </div>
 
-              <div class="form-group">
-                <div class="col-md-6 offset-md-3 text-center">
-                  <button type="submit" class="btn btn-primary" v-on:click="submitForm">Place Order</button>
-                </div>
+            <div class="form-group">
+              <div class="col-md-6 offset-md-3 text-center">
+                <button type="submit" class="btn btn-primary" v-on:click="submitForm">Place Order</button>
               </div>
-            </form>
-            <div class="col-md-12 verify">
-              <pre>
+            </div>
+          </form>
+          <div class="col-md-12 verify">
+            <pre>
                   First Name: {{ order.firstName }}
                   Last Name: {{ order.lastName }}
                   Address: {{ order.address }}
@@ -131,7 +132,6 @@
                   Method: {{ order.method }}
                   Gift: {{ order.gift }}
                 </pre>
-            </div>
           </div>
         </div>
       </div>
@@ -198,8 +198,9 @@
         }
       },
       methods: {
-        addToCart: function () {
-          this.cart.push(this.product.id);
+        addToCart: function (aProduct) {
+          this.cart.push(aProduct.id);
+          console.log(this.cart);
         },
         // используем сокращенный синтаксис объявления методов
         showCheckout() {
@@ -208,16 +209,26 @@
         submitForm() {
           alert("Submitted");
         },
-        checkRating(n) {
-          return this.product.rating - n >= 0;
+        checkRating(n, myProduct) {
+          return myProduct.rating - n >= 0;
+        },
+        canAddToCart(aProduct) {
+          return aProduct.availableInventory > this.cartCount(aProduct.id);
+        },
+        cartCount(id) {
+          let count = 0;
+          for (var i = 0; i < this.cart.length; i++) {
+            if (this.cart[i] === id) {
+              count++;
+            }
+          }
+
+          return count;
         }
       },
       computed: {
         cartItemCount: function () {
           return this.cart.length || "";
-        },
-        canAddToCart: function () {
-          return this.product.availableInventory > this.cartItemCount;
         }
       },
       beforeCreate: function () {
