@@ -43,6 +43,15 @@
                 Add to cart
               </button>
               <button class="btn btn-primary default" disabled v-else>Add to cart</button>
+              <span class="inventory-message" v-if="product.availableInventory - cartItemCount === 0">
+                All out!
+              </span>
+              <span class="inventory-message" v-else-if="product.availableInventory - cartItemCount < 5">
+                Only {{product.availableInventory - cartItemCount}} left!
+              </span>
+              <span class="inventory-message" v-else>
+                Buy Now!
+              </span>
             </div>
           </div>
           <div class="w-100" v-else>
@@ -143,7 +152,7 @@
             "A 25 pound bag of <em>irresistible</em>, organic goodness for your cat.",
           price: 2000, // цена указывается в центах
           image: "assets/images/product-fullsize.png",
-          availableInventory: 5
+          availableInventory: 10
         },
         cart: [],
         showProduct: true,
