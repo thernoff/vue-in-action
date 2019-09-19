@@ -79,7 +79,11 @@
 
                 <div class="col-md-6 offset-md-4">
                   <strong>Zip/Postal Code:</strong>
-                  <input v-model="order.zip" class="form-contol" />
+                  <!--
+                    input:number возвращает строку, чтобы значение автоматически приводилось к число, добавим
+                    модификатор number директиве v-model
+                  -->
+                  <input v-model.number="order.zip" type="number" class="form-contol" />
                 </div>
               </div>
 
@@ -110,7 +114,7 @@
                   Last Name: {{ order.lastName }}
                   Address: {{ order.address }}
                   City: {{ order.city }}
-                  Zip: {{ order.zip }}
+                  Zip: {{ typeof(order.zip) }}
                   State: {{ order.state }}
                   Method: {{ order.method }}
                   Gift: {{ order.gift }}
