@@ -50,22 +50,22 @@
               <div class="form-row">
                 <div class="form-group col-md-6">
                   <strong>First Name:</strong>
-                  <input v-model="order.firstName" class="form-control" />
+                  <input v-model.trim="order.firstName" class="form-control" />
                 </div>
                 <div class="form-group col-md-6">
                   <strong>Last Name:</strong>
-                  <input v-model="order.lastName" class="form-control" />
+                  <input v-model.trim="order.lastName" class="form-control" />
                 </div>
               </div>
 
               <div class="form-group">
                 <strong>Address:</strong>
-                <input v-model="order.address" class="form-contol" />
+                <input v-model.trim="order.address" class="form-contol" />
               </div>
 
               <div class="form-group">
                 <strong>City:</strong>
-                <input v-model="order.city" class="form-contol" />
+                <input v-model.trim="order.city" class="form-contol" />
               </div>
 
               <div class="form-row">
