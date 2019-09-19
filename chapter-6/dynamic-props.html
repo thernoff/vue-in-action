@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link rel="stylesheet" href="./assets/css/bootstrap.min.css" />
+</head>
+
+<body>
+  <div id="app" class="container p-0">
+    <my-component v-bind:text="message"></my-component>
+  </div>
+  <script src="./js/vue.min.js"></script>
+  <script src="./js/axios.min.js"></script>
+  <script>
+    const MyComponent = {
+      props: ['text'],
+      template: '<div>Hello {{ text }}! {{tester1}}</div>',
+      data() {
+        return {
+          tester1: 'Testing text'
+        }
+      }
+    };
+
+    var app = new Vue({
+      el: "#app",
+      components: {
+        'my-component': MyComponent
+      },
+      data() {
+        return {
+          message: 'From Parent Component!'
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>
