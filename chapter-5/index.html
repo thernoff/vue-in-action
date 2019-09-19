@@ -28,7 +28,7 @@
     <main>
       <div class="container">
         <div class="w-100" v-if="showProduct">
-          <div class="row product" v-for="product in products">
+          <div class="row product" v-for="product in sortedProducts">
             <div class="col">
               <figure>
                 <img class="img-fluid" v-bind:src="product.image" v-bind:alt="product.title" />
@@ -229,6 +229,25 @@
       computed: {
         cartItemCount: function () {
           return this.cart.length || "";
+        },
+        sortedProducts() {
+          if (this.products.length > 0) {
+            // преобразуем объект в массив с помощью стандартного метода slice()
+            let productsArray = this.products.slice(0);
+            function compare(a, b) {
+              if (a.title.toLowerCase() < b.title.toLowerCase()) {
+                return -1;
+              }
+
+              if (a.title.toLowerCase() > b.title.toLowerCase()) {
+                return 1;
+              }
+
+              return 0;
+            }
+
+            return productsArray.sort(compare);
+          }
         }
       },
       beforeCreate: function () {
