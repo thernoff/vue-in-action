@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link rel="stylesheet" href="./assets/css/bootstrap.min.css" />
+</head>
+
+<body>
+  <!--
+    При разработке больших проектов иногда приходиться разбивать приложение на отдельные компоненты и загружать из по мере необходимости.
+    Vue облегчает этот процесс с помощью асинхронных компонентов. Каждый компонент можно определитьв в виде функции, которая загружает
+    компонент асинхронно. Более того, Vue.js кэширует загруженный код для последующей перерисовки.
+  -->
+  <div id="app" class="container p-0">
+    <book-component></book-component>
+  </div>
+  <script src="./js/vue.js"></script>
+  <script>
+    const BookComponent = function (resolve, reject) {
+      setTimeout(
+        function () {
+          resolve({
+            template: `
+              <div>
+                <h1>
+                  Async component
+                </h1>
+              </div>
+            `
+          });
+        },
+        2000
+      );
+    }
+
+    var app = new Vue({
+      el: "#app",
+      components: {
+        'book-component': BookComponent
+      },
+      data() {
+        return {
+
+        };
+      }
+    });
+  </script>
+</body>
+
+</html>
