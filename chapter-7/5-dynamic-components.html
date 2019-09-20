@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link rel="stylesheet" href="./assets/css/bootstrap.min.css" />
+</head>
+
+<body>
+  <!--
+    Еще одной сильной стороной Vue.js являются динамические компоненты. Они позволяют на лету переключаться между разными элементами,
+    используя зарезервированный элемент component и атрибут is.
+  -->
+  <div id="app" class="container p-0">
+    <button @click="cycle">Cycle</button>
+    <h1>
+      <component :is="currenView"></component>
+    </h1>
+  </div>
+  <script src="./js/vue.js"></script>
+  <script>
+    const BookComponent = {
+      template: `
+        <div>
+          Book Component
+        </div>
+      `
+    }
+
+    const FormComponent = {
+      template: `
+        <div>
+          Form Component
+        </div>
+      `
+    }
+
+    const HeaderComponent = {
+      template: `
+        <div>
+          Header Component
+        </div>
+      `
+    }
+
+    var app = new Vue({
+      el: "#app",
+      components: {
+        'book-component': BookComponent,
+        'form-component': FormComponent,
+        'header-component': HeaderComponent
+      },
+      data() {
+        return {
+          currenView: BookComponent // это свойство изначально ссылается на BookComponent
+        };
+      },
+      methods: {
+        cycle() {
+          if (this.currenView === HeaderComponent) {
+            this.currenView = BookComponent;
+          } else {
+            this.currenView = this.currenView === BookComponent ? FormComponent : HeaderComponent;
+          }
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>
