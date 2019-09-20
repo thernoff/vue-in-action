@@ -13,8 +13,8 @@
           <p v-html="product.description"></p>
           <!--Использование фильтра formatPrice()-->
           <p class="price">{{ product.price }}</p>
-          <button>Edit Product</button>
-          <!-- <router-view></router-view> -->
+          <button class="btn btn-success" @click="edit">Edit Product</button>
+          <router-view></router-view>
         </div>
       </div>
     </div>
@@ -30,6 +30,11 @@ export default {
     return {
       product: ""
     };
+  },
+  methods: {
+    edit() {
+      this.$router.push({ name: "Edit" });
+    }
   },
   created: function() {
     axiosInstance.get("products.json").then(response => {
