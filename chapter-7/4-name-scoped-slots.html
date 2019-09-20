@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link rel="stylesheet" href="./assets/css/bootstrap.min.css" />
+</head>
+<!--Данный пример вместо slot-scope использует обновленный синтаксис-->
+
+<body>
+  <div id="app" class="container p-0">
+    <book-component :books=books>
+      <template v-slot:header>
+        <h1>{{header}}</h1>
+      </template>
+
+      <template v-slot:book="slotData">
+        <h2>
+          <!--
+            slotData - это объект, у которого свойство slotBook (указывается в шаблоне компонента :slotBook="book"),
+            а значением этого свойства является объект book, который также указывается в шаблоне компонента :slotBook="book"
+          -->
+          <i>{{slotData.slotBook.author}}</i>
+          <small>by: {{slotData.slotBook.title}}</small>
+        </h2>
+      </template>
+    </book-component>
+
+  </div>
+  <script src="./js/vue.js"></script>
+  <script>
+    const BookComponent = {
+      template: `
+        <div>
+          <slot name="header"></slot>
+          <slot name="book"
+            v-for="book in books"
+            :slotBook="book"
+          ></slot>
+        </div>
+      `,
+      props: ['books']
+    };
+
+    var app = new Vue({
+      el: "#app",
+      components: {
+        'book-component': BookComponent
+      },
+      data() {
+        return {
+          header: 'Book List',
+          books: [
+            {
+              author: 'John Smith',
+              title: 'Best Of Times'
+            },
+            {
+              author: 'Jane Doe',
+              title: 'Go West Young Man'
+            },
+            {
+              author: 'Avery Katz',
+              title: 'The Life And Times Of Avery'
+            }
+          ]
+        };
+      }
+    });
+  </script>
+</body>
+
+</html>
