@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="./assets/css/bootstrap.min.css" />
+  </head>
+
+  <body>
+    <div id="app" class="container p-0">
+      {{ counter }}<br />
+      <button @click="incrementCounter">Increment Counter</button>
+      <my-component :my-counter.sync="counter"></my-component>
+    </div>
+    <script src="./js/vue.js"></script>
+    <script>
+      const MyComponent = {
+        template: `
+        <div>
+          <button v-on:click="childIncrementCounter">Increment From Child</button>
+        </div>
+      `,
+        methods: {
+          childIncrementCounter() {
+            // генерация события increment-me
+            this.$emit("update:myCounter", this.myCounter + 1);
+          }
+        },
+        props: ["my-counter"]
+      };
+
+      var app = new Vue({
+        el: "#app",
+        components: {
+          "my-component": MyComponent
+        },
+        data() {
+          return {
+            counter: 0
+          };
+        },
+        methods: {
+          incrementCounter() {
+            this.counter++;
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
