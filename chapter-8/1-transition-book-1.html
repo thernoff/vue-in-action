@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link rel="stylesheet" href="./assets/css/bootstrap.min.css" />
+  <style>
+    .fade-enter-active,
+    .fade-leave-active {
+      transition: opacity 1.0s ease-out;
+    }
+
+    .fade-enter,
+    .fade-leave-to {
+      opacity: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app" class="container p-0">
+    <div @click="show = !show">
+      <h2>{{title}}</h2>
+    </div>
+    <transition name="fade">
+      <div v-if="show">
+        <p>{{description}}</p>
+      </div>
+    </transition>
+  </div>
+  <script src="./js/vue.js"></script>
+  <script>
+
+
+    var app = new Vue({
+      el: "#app",
+      data() {
+        return {
+          title: "War and Peace",
+          description: "Lorem ipsum dolor sit amet, consectetur adipiscing elim",
+          show: false
+        };
+      }
+    });
+  </script>
+</body>
+
+</html>
