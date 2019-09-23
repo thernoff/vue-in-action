@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link rel="stylesheet" href="./assets/css/bootstrap.min.css" />
+  <style>
+    .component-fade-enter-active,
+    .component-fade-leave-active {
+      transition: opacity .5s ease;
+    }
+
+    .component-fade-enter,
+    .component-fade-leave-to {
+      opacity: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app" class="container p-0">
+    <button @click="cycle">Cycle</button>
+    <h1>
+      <transition name="component-fade" mode="out-in">
+        <component :is="currenView"></component>
+      </transition>
+    </h1>
+  </div>
+  <script src="./js/vue.js"></script>
+  <script>
+    const BookComponent = {
+      template: `
+        <div>
+          Book Component
+        </div>
+      `
+    }
+
+    const FormComponent = {
+      template: `
+        <div>
+          Form Component
+        </div>
+      `
+    }
+
+    const HeaderComponent = {
+      template: `
+        <div>
+          Header Component
+        </div>
+      `
+    }
+
+    var app = new Vue({
+      el: "#app",
+      components: {
+        'book-component': BookComponent,
+        'form-component': FormComponent,
+        'header-component': HeaderComponent
+      },
+      data() {
+        return {
+          currenView: BookComponent // это свойство изначально ссылается на BookComponent
+        };
+      },
+      methods: {
+        cycle() {
+          if (this.currenView === HeaderComponent) {
+            this.currenView = BookComponent;
+          } else {
+            this.currenView = this.currenView === BookComponent ? FormComponent : HeaderComponent;
+          }
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>
