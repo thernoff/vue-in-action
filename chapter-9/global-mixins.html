@@ -27,8 +27,8 @@
   </div>
   <script src="./js/vue.js"></script>
   <script>
-    // примесь myButton
-    const myButton = {
+    // глобальная примесь
+    Vue.mixin({
       methods: {
         pressed(val) {
           alert(val);
@@ -39,7 +39,7 @@
           item: ''
         }
       }
-    };
+    });
 
     const comp1 = {
       template: `
@@ -58,8 +58,7 @@
             </div>
           </form>
         </div>
-      `,
-      mixins: [myButton]
+      `
     }
 
     const comp2 = {
@@ -78,8 +77,7 @@
             </div>
           </form>
         </div>
-      `,
-      mixins: [myButton]
+      `
     }
 
     var app = new Vue({
