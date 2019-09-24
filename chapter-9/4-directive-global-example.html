@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link rel="stylesheet" href="./assets/css/bootstrap.min.css" />
+</head>
+
+<body>
+  <div id="app" class="container p-0">
+    <p v-style-me:text-center.large="'red'">{{welcome}}</p>
+    <p v-style-me.small>Hi everybody</p>
+  </div>
+  <script src="./js/vue.js"></script>
+  <script>
+    Vue.directive('style-me', {
+      bind(el, binding) {
+        /*
+          binding - объект, с полями arg, modifiers, value и др.
+        */
+        console.log('binding', binding);
+        el.style.color = binding.value || "blue";
+
+        if (binding.modifiers.large) {
+          el.style.fontSize = "3rem";
+        } else {
+          el.style.fontSize = ".8rem";
+        }
+
+        el.className = (binding.arg) ? binding.arg : "";
+      }
+    })
+
+    var app = new Vue({
+      el: "#app",
+      data() {
+        return {
+          welcome: 'Hello World!'
+        };
+      }
+    });
+  </script>
+</body>
+
+</html>
