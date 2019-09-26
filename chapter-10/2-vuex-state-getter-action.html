@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link rel="stylesheet" href="./assets/css/bootstrap.min.css" />
+</head>
+
+<body>
+  <div id="app" class="container p-0">
+    <h1>{{header}}</h1>
+    <h2>{{welcome}}</h2>
+    <h3>{{counter}}</h3>
+    <button @click="increment">Press me</button>
+  </div>
+  <script src="./js/vue.js"></script>
+  <script src="./js/vuex.js"></script>
+  <script>
+    const store = new Vuex.Store({
+      state: {
+        msg: 'Hello World',
+        count: 0
+      },
+      mutations: {
+        increment(state, payload = 1) {
+          state.count += payload;
+        }
+      },
+      getters: {
+        msg(state) {
+          return state.msg.toUpperCase();
+        },
+        count(state) {
+          return state.count;
+        }
+      },
+      actions: {
+        increment(context, payload) {
+          setTimeout(function () {
+            context.commit('increment', payload)
+          }, 2000);
+        }
+      }
+    });
+
+    var app = new Vue({
+      el: "#app",
+      data() {
+        return {
+          header: 'Vuex App'
+        };
+      },
+      computed: {
+        welcome() {
+          return store.getters.msg;
+        },
+        counter() {
+          return store.getters.count;
+        }
+      },
+      methods: {
+        // метод increment выполняет одноименный action
+        increment() {
+          store.dispatch('increment', 10);
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>
