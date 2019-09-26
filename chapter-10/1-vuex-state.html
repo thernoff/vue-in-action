@@ -10,15 +10,46 @@
 
 <body>
   <div id="app" class="container p-0">
+    <h1>{{header}}</h1>
+    <h2>{{welcome}}</h2>
+    <h3>{{counter}}</h3>
+    <button @click="increment">Press me</button>
   </div>
   <script src="./js/vue.js"></script>
   <script src="./js/vuex.js"></script>
   <script>
+    const store = new Vuex.Store({
+      state: {
+        msg: 'Hello World',
+        count: 0
+      },
+      mutations: {
+        increment(state, payload = 1) {
+          state.count += payload;
+        }
+      }
+    });
 
     var app = new Vue({
       el: "#app",
       data() {
-        return {};
+        return {
+          header: 'Vuex App'
+        };
+      },
+      computed: {
+        welcome() {
+          return store.state.msg;
+        },
+        counter() {
+          return store.state.count;
+        }
+      },
+      methods: {
+        // метод increment выполняет одноименную мутацию
+        increment() {
+          store.commit('increment', 10);
+        }
       }
     });
   </script>
