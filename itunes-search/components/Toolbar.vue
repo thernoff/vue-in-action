@@ -9,7 +9,7 @@
     <v-spacer></v-spacer>
 
     <v-btn to="/">
-      <v-icon>refresh</v-icon>
+      <v-icon>mdi-refresh</v-icon>
     </v-btn>
   </v-app-bar>
 </template>

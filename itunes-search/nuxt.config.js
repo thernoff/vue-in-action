@@ -40,6 +40,9 @@ module.exports = {
   ],
   vuetify: {
     /* module options */
+    icons: {
+      iconfont: 'mdi'
+    },
   }
 }
 
