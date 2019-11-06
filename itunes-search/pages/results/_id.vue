@@ -20,6 +20,16 @@
 import axios from "axios";
 import Card from "@/components/Card.vue";
 export default {
+  // можно воспользоваться методом asyncData, который используется для загрузки данных на стороне сервера
+  // во время инициализации компонента. Как и промежуточные обработчики, он принимает контекст приложения.
+  asyncData({ params }) {
+    return axios
+      .get(`https://itunes.apple.com/search?term=${params.id}&entity=album`)
+      .then(response => {
+        console.log(response.data.results);
+        return { albumData: response.data.results };
+      });
+  },
   components: {
     Card
   },
@@ -29,13 +39,13 @@ export default {
     }
   },
   computed: {
-    albumData() {
+    /* albumData() {
       console.log("albumData", this.$store.state.albums);
       return this.$store.state.albums;
-    }
-  },
+    } */
+  }
   // Параметр middleware позволяет определить промежуточный обработчик для страницы.
   // Он будет выполняться при каждой загрузку компонента.
-  middleware: "search"
+  //middleware: "search"
 };
 </script>
