@@ -1,47 +1,8 @@
 <template>
   <div>
-    <my-header :cartItemCount="cartItemCount"></my-header>
-    <div class="container">
-      <div class="row product" v-for="product in sortedProducts" v-bind:key="product.id">
-        <div class="col">
-          <figure>
-            <img class="img-fluid" v-bind:src="product.image" v-bind:alt="product.title" />
-          </figure>
-        </div>
-        <div class="col col-expand">
-          <router-link tag="h1" :to="{name: 'Id', params: {id: product.id}}">{{product.title}}</router-link>
-          <p v-html="product.description"></p>
-          <!--Использование фильтра formatPrice()-->
-          <p class="price">{{ product.price | formatPrice }}</p>
-          <button
-            class="btn btn-primary default"
-            v-on:click="addToCart(product)"
-            v-if="canAddToCart(product)"
-          >Add to cart</button>
-          <button class="btn btn-primary default" disabled v-else>Add to cart</button>
-          <transition name="bounce" mode="out-in">
-            <span
-              class="inventory-message"
-              v-if="product.availableInventory - cartCount(product.id) === 0"
-              key="0"
-            >All out!</span>
-            <span
-              class="inventory-message"
-              v-else-if="product.availableInventory - cartCount(product.id) < 5"
-              key
-            >Only {{product.availableInventory - cartCount(product.id)}} left!</span>
-            <span class="inventory-message" v-else key>Buy Now!</span>
-          </transition>
-          <div class="rating">
-            <span
-              v-bind:class="{'rating-active': checkRating(n, product)}"
-              v-for="n in 5"
-              v-bind:key="n"
-            >☆</span>
-          </div>
-        </div>
-      </div>
-    </div>
+    <transition name="bounce" mode="out-in">
+      <router-view></router-view>
+    </transition>
   </div>
 </template>
 
