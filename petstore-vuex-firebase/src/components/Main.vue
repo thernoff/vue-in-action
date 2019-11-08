@@ -1,8 +1,11 @@
 <template>
   <div>
     <my-header :cartItemCount="cartItemCount"></my-header>
-    <main>
-      <div v-for="product in sortedProducts" v-bind:key="product.id">
+    <main class="container">
+      <div class="row" v-if="!products.length">
+        <h3 class="text-center">Список товаров загружается с сервера...</h3>
+      </div>
+      <div v-for="product in sortedProducts" v-bind:key="product.id" v-else>
         <div class="row">
           <div class="col-md-5 col-md-offset-0">
             <figure>
@@ -65,12 +68,18 @@ import MyHeader from "./Header.vue";
  * }
  */
 import { mapGetters } from "vuex";
+// данные берем не из хранилища, а из базы данных
+import { productsRef } from "../firebase";
 
 export default {
   name: "imain",
+  firebase: {
+    products: productsRef
+  },
   data() {
     return {
-      cart: []
+      cart: [],
+      products: []
     };
   },
   components: { MyHeader },
@@ -113,7 +122,10 @@ export default {
     /* products() {
       return this.$store.getters.products;
     } */
-    ...mapGetters(["products"])
+    ...mapGetters([
+      //"products"
+      "session"
+    ])
   },
   filters: {
     formatPrice(price) {
@@ -135,7 +147,7 @@ export default {
     }
   },
   created: function() {
-    this.$store.dispatch("initStore");
+    //this.$store.dispatch("initStore");
   }
 };
 </script>
