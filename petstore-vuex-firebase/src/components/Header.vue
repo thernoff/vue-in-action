@@ -11,23 +11,35 @@
             {{ cartItemCount }}
           </span>Checkout
         </button>-->
-        <router-link
-          active-class="active"
-          tag="button"
-          class="btn btn-default text-white btn-lg"
-          :to="{name: 'Form'}"
-        >
-          <span>
-            <i class="fas fa-shopping-cart mr-1"></i>
-            {{ cartItemCount }}
-          </span>Checkout
-        </router-link>
+        <div v-if="!mySession">
+          <button type="button" class="btn btn-default btn-lg" v-on:click="signIn">Sign In</button>
+        </div>
+        <div v-else>
+          <button type="button" class="btn btn-default btn-lg" v-on:click="signOut">
+            <img class="photo" :src="mySession.photoURL" alt />
+            Sign Out
+          </button>
+        </div>
+        <div>
+          <router-link
+            active-class="active"
+            tag="button"
+            class="btn btn-default text-white btn-lg"
+            :to="{name: 'Form'}"
+          >
+            <span>
+              <i class="fas fa-shopping-cart mr-1"></i>
+              {{ cartItemCount }}
+            </span>Checkout
+          </router-link>
+        </div>
       </div>
     </nav>
   </header>
 </template>
 
 <script>
+import firebase from "firebase";
 export default {
   name: "my-header",
   data() {
@@ -36,9 +48,43 @@ export default {
     };
   },
   props: ["cartItemCount"],
+  beforeCreate() {
+    firebase.auth().onAuthStateChanged(user => {
+      this.$store.commit("SET_SESSION", user || false);
+    });
+  },
   methods: {
     showCheckout() {
       this.$router.push({ name: "Form" });
+    },
+    signIn() {
+      let provider = new firebase.auth.GoogleAuthProvider();
+      firebase
+        .auth()
+        .signInWithPopup(provider)
+        .then(function(result) {
+          console.log("signed in!");
+        })
+        .catch(function(error) {
+          console.log("error " + error);
+        });
+    },
+    signOut() {
+      firebase
+        .auth()
+        .signOut()
+        .then(function() {
+          // успешный выход
+          console.log("signed out!");
+        })
+        .catch(function(error) {
+          console.log("error " + error);
+        });
+    }
+  },
+  computed: {
+    mySession() {
+      return this.$store.getters.session;
     }
   }
 };
@@ -55,5 +101,10 @@ a:hover {
 .router-link-exact-active {
   border-color: lightgray;
   color: lightgray !important;
+}
+
+.photo {
+  width: 25px;
+  height: 25px;
 }
 </style>
