@@ -1,13 +1,11 @@
 import axios from "axios";
 
 const state = {
-  products: {},
-  session: false
+  products: {}
 };
 
 const getters = {
-  products: state => state.products,
-  session: state => state.session
+  products: state => state.products
 };
 
 const actions = {
@@ -22,9 +20,6 @@ const actions = {
 const mutations = {
   'SET_STORE'(state, products) {
     state.products = products;
-  },
-  'SET_SESSION'(state, session) {
-    state.session = session;
   }
 };
 

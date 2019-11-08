@@ -1,11 +1,11 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import products from './modules/products';
+import sessions from './modules/sessions';
 
 Vue.use(Vuex); // подключаем Vuex к Vue
 
 export const store = new Vuex.Store({
   modules: {
-    products
+    sessions
   }
 });
