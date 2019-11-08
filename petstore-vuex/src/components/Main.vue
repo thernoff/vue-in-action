@@ -51,6 +51,21 @@
 </template>
 <script>
 import MyHeader from "./Header.vue";
+
+/**
+ * вспомогательный метод mapGetters применяется для добавления всех имеющихся геттеров в раздел computed
+ * т.е. mapGetters сделает так, что все геттеры будут добавлены в виде вычисляемых свойств
+ * аналогично можно импортировать mapState, mapMutations и mapActions
+ * например {mapMutations} from 'vuex'
+ * далее mut1 привязывает this.mut1() к this.$store.commit('mut1')
+ * methods: {
+ *  ...mapMutations([
+ *    'mut1'
+ *  ])
+ * }
+ */
+import { mapGetters } from "vuex";
+
 export default {
   name: "imain",
   data() {
@@ -95,9 +110,10 @@ export default {
         return productsArray.sort(compare);
       }
     },
-    products() {
+    /* products() {
       return this.$store.getters.products;
-    }
+    } */
+    ...mapGetters(["products"])
   },
   filters: {
     formatPrice(price) {
